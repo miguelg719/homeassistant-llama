@@ -1,0 +1,9 @@
+fastapi
+pydantic
+langchain
+langchain-ollama
+langchain-core
+langchain-community
+gradio
+requests
+uvicorn
