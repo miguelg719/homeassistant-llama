@@ -1,4 +1,5 @@
 services:
+
   fastapi-app:
     build: .
     ports:
@@ -9,3 +10,22 @@ services:
       - .env
     environment:
       - WATCHFILES_FORCE_POLLING=true
+    networks:
+      - ha_network
+
+  homeassistant:
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    ports:
+      - "8123:8123"
+    volumes:
+      - ./ha_config/:/config/
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    # privileged: true
+    networks:
+      - ha_network
+      
+networks:
+  ha_network:
+    driver: bridge

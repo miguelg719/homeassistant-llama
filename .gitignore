@@ -107,3 +107,13 @@ media/
 *.bak
 *.swp
 *~
+
+
+/ha_config/.HA_VERSION
+/ha_config/.cloud/
+/ha_config/.storage/
+/ha_config/blueprints/
+/ha_config/tts/
+/ha_config/known_devices.yaml
+/ha_config/home-assistant*
+/ha_config/deps/
