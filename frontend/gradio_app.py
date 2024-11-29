@@ -53,7 +53,7 @@ def chat_with_agent(message, history):
 # Create Gradio interface
 with gr.Blocks() as demo:
     chatbot = gr.Chatbot(
-        label="Chat with Jarvis",
+        label="Chat with Llama",
         height=600,
         show_copy_button=True,
     )
