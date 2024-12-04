@@ -2,15 +2,12 @@
 
 Combine the power of [Home Assistant](https://www.home-assistant.io/) with Meta’s [Llama 3.2](https://llama.com) to create a private, local, and adaptive smart home assistant. This integration allows you to control smart devices using natural language, ensuring your data stays on your network.
 
----
-
 ## Features
 
 - **Local Processing**: All data is processed locally, ensuring privacy and eliminating cloud dependency.
 - **Unified Smart Home Control**: Manage devices across brands via Home Assistant's central hub.
 - **User-Friendly Interface**: Interact with the system through a simple Gradio chat interface.
 
----
 
 ## Directory Structure
 
