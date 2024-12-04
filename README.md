@@ -1,4 +1,4 @@
-# HomeAssistant-Llama Integration
+# Home Assistant-Llama Integration
 
 Combine the power of [Home Assistant](https://www.home-assistant.io/) with Meta’s [Llama 3.2](https://llama.com) to create a private, local, and adaptive smart home assistant. This integration allows you to control smart devices using natural language, ensuring your data stays on your network.
 
