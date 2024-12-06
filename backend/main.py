@@ -8,10 +8,6 @@ from datetime import datetime
 from .agent.prompts import action_execution_prompt
 from pydantic import BaseModel
 from fastapi import HTTPException
-from .homeassistant.functions import (
-    turn_light_on, turn_light_off,
-    # ... other functions ...
-)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

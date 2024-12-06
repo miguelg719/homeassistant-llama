@@ -117,3 +117,6 @@ media/
 /ha_config/known_devices.yaml
 /ha_config/home-assistant*
 /ha_config/deps/
+
+test_server.py
+test.py
