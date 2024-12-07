@@ -3,15 +3,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from .agent.services import ollama_chat_completion
-import json
-from datetime import datetime
-from .agent.prompts import action_execution_prompt
 from pydantic import BaseModel
 from fastapi import HTTPException
-from .homeassistant.functions import (
-    turn_light_on, turn_light_off,
-    # ... other functions ...
-)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -33,20 +26,17 @@ class ChatInput(BaseModel):
 async def get_answer(prompt, previous_context=None):
     try:
         response = await ollama_chat_completion(
-            action_execution_prompt, 
-            prompt, 
+            system_message="You are a helpful assistant that can control home automation devices. Respond after the tool call is made.",
+            user_message=prompt, 
             previous_context=previous_context
         )
         
         logger.info(f"Llama response: {response}")
-
         return response['output']
 
     except Exception as e:
         logger.error(f"Error in get_answer: {str(e)}", exc_info=True)
         raise
-   
-
 
 @app.get("/health")
 async def health_check():
@@ -57,8 +47,7 @@ async def test_ollama():
     try:
         response = await ollama_chat_completion(
             system_message="You are a helpful assistant.",
-            user_message="Hello, are you working?",
-            model_name="llama3.2"  # Specify your model
+            user_message="Hello, are you working?"
         )
         return {"success": True, "response": response}
     except Exception as e:
@@ -76,7 +65,6 @@ async def chat_endpoint(chat_input: ChatInput):
     except Exception as e:
         logger.error(f"Error processing chat request: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

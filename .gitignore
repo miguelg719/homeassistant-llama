@@ -119,3 +119,4 @@ media/
 /ha_config/deps/
 
 test.py
+example_tool.py
