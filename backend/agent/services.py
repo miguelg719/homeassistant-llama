@@ -1,7 +1,8 @@
 from llama_stack_client import LlamaStackClient
 from llama_stack_client.lib.agents.agent import Agent
 from llama_stack_client.types.agent_create_params import AgentConfig
-from llama_stack_client.types import UserMessage
+from llama_stack_client.lib.agents.event_logger import EventLogger
+from llama_stack_client.types import CompletionMessage, ToolResponseMessage
 from ..homeassistant.functions import (
     ExampleTool, LightTurnOnTool, LightTurnOffTool,
     ClimateTurnOnTool, ClimateTurnOffTool, SetClimateTemperatureTool,
@@ -80,7 +81,7 @@ async def create_llama_agent(system_message):
                   "parameters": {
                       "entity_id": {
                           "param_type": "str",
-                          "description": "The name of the climate system (default: hvac)",
+                          "description": "The name of the climate system (hvac). Use 'hvac'",
                           "required": False,
                       },
                       "mode": {
@@ -203,28 +204,28 @@ async def ollama_chat_completion(system_message, user_message, previous_context=
     try:
         agent = await create_llama_agent(system_message)
         session_id = agent.create_session("user-session")
-        
-        messages = []
-        if previous_context:
-            # Add previous context as system message
-            messages.append({
-                'content': previous_context,
-                'role': 'system'
-            })
+
+        messages = [
+            {
+                'content': user_message,
+                'role': 'user'
+            },
+            {
+                'content': 'Mention the result of the last executed tool',
+                'role': 'user'
+            }
+        ]
+
+        for message in messages:
+            response = agent.create_turn(
+                messages=[message],
+                session_id=session_id,
+            )
+
+            for log in EventLogger().log(response):
+                log.print() 
             
-        messages.append({
-            'content': user_message,
-            'role': 'user'
-        })
-
-        response = agent.create_turn(
-            messages=messages,
-            session_id=session_id,
-        )
-
-        # Combine all responses into a single string
-        full_response = " ".join(str(r) for r in response)
-        return {"output": full_response}
+        return 'Done'
 
     except Exception as e:
         logger.error(f"Error in chat completion: {str(e)}", exc_info=True)

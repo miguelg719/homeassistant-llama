@@ -32,7 +32,7 @@ async def get_answer(prompt, previous_context=None):
         )
         
         logger.info(f"Llama response: {response}")
-        return response['output']
+        return response
 
     except Exception as e:
         logger.error(f"Error in get_answer: {str(e)}", exc_info=True)

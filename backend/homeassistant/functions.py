@@ -29,7 +29,7 @@ class SingleMessageCustomTool(CustomTool):
         message = messages[0]
 
         tool_call = message.tool_calls[0]
-        print(f"\n\n\nmessage: {message}, tool_call: {tool_call}")
+        # print(f"\n\n\nmessage: {message}, tool_call: {tool_call}")
 
         try:
             response = self.run_impl(**tool_call.arguments)
@@ -104,7 +104,7 @@ class LightTurnOnTool(SingleMessageCustomTool):
     
     def run_impl(self, *args, **kwargs):
       entity_id = kwargs['entity_id']
-      brightness_pct = kwargs['brightness_pct']
+      brightness_pct = int(kwargs['brightness_pct']) if 'brightness_pct' in kwargs else None
       url = f"http://localhost:8123/api/services/light/turn_on"
       headers = {
           "Authorization": f"Bearer {token}",
@@ -160,11 +160,6 @@ class LightTurnOffTool(SingleMessageCustomTool):
                 param_type="str",
                 description="The entity id of the light to be turned on",
                 required=True,
-            ),
-            "brightness_pct": ToolParamDefinitionParam(
-                param_type="int",
-                description="The brightness level to turn the light on",
-                required=False,
             )
         }
 
@@ -286,7 +281,7 @@ class SetClimateTemperatureTool(SingleMessageCustomTool):
     
     def run_impl(self, *args, **kwargs):
         entity_id = kwargs.get('entity_id', 'hvac')
-        setpoint = kwargs['setpoint']
+        setpoint = int(kwargs['setpoint'])
         url = f"http://localhost:8123/api/services/climate/set_temperature"
         headers = {
             "Authorization": f"Bearer {token}",
