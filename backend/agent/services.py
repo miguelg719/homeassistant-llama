@@ -211,7 +211,7 @@ async def ollama_chat_completion(system_message, user_message, previous_context=
                 'role': 'user'
             },
             {
-                'content': 'Mention the result of the last executed tool',
+                'content': 'Did you achieve your goal? Be concise.',
                 'role': 'user'
             }
         ]
