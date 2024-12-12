@@ -8,6 +8,7 @@ from ..homeassistant.functions import (
     ClimateTurnOnTool, ClimateTurnOffTool, SetClimateTemperatureTool,
     SetClimateFanTool, ArmSystemTool, DisarmSystemTool
 )
+from pprint import pprint
 
 import logging
 
@@ -211,21 +212,30 @@ async def ollama_chat_completion(system_message, user_message, previous_context=
                 'role': 'user'
             },
             {
-                'content': 'Did you achieve your goal? Be concise.',
+                'content': 'Explain to the user if you achieved your goal, ask if they need anything else. Be extremely concise.',
                 'role': 'user'
             }
         ]
 
+        # TODO: Try system prompt? 
+        res = None
         for message in messages:
             response = agent.create_turn(
                 messages=[message],
                 session_id=session_id,
             )
 
-            for log in EventLogger().log(response):
-                log.print() 
-            
-        return 'Done'
+            # for log in EventLogger().log(response):
+            #     log.print() 
+            for r in response:
+                if hasattr(r, 'event') and hasattr(r.event, 'payload'):
+                        if r.event.payload.event_type == 'turn_complete':
+                            turn_res = r.event.payload.turn
+                            print(turn_res)
+                            if hasattr(turn_res, 'output_message'):
+                                res =  turn_res.output_message.content
+        
+        return res
 
     except Exception as e:
         logger.error(f"Error in chat completion: {str(e)}", exc_info=True)

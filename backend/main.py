@@ -61,7 +61,8 @@ async def test_ollama():
 async def chat_endpoint(chat_input: ChatInput):
     try:
         response = await get_answer(chat_input.prompt, chat_input.previous_context)
-        return {"success": True, "response": response}
+        if response:
+            return {"success": True, "response": response[1:-1]}
     except Exception as e:
         logger.error(f"Error processing chat request: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
