@@ -201,6 +201,7 @@ async def create_llama_agent(system_message):
     
     return agent
 
+# TODO: Enable previous context for mem
 async def ollama_chat_completion(system_message, user_message, previous_context=None):
     try:
         agent = await create_llama_agent(system_message)

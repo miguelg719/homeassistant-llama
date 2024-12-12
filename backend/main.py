@@ -26,7 +26,7 @@ class ChatInput(BaseModel):
 async def get_answer(prompt, previous_context=None):
     try:
         response = await ollama_chat_completion(
-            system_message="You are a helpful assistant that can control home automation devices. Respond after the tool call is made.",
+            system_message="You are a friendly and helpful assistant that can control home automation devices.",
             user_message=prompt, 
             previous_context=previous_context
         )
